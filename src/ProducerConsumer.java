@@ -6,20 +6,20 @@ class Buffer {
 
     public synchronized void produce(int value) throws InterruptedException {
         while (queue.size() == capacity) {
-            wait(); // Chờ nếu buffer đầy
+            wait();
         }
         queue.add(value);
         System.out.println("Produced: " + value);
-        notify(); // Báo cho consumer có thể lấy dữ liệu
+        notify();
     }
 
     public synchronized int consume() throws InterruptedException {
         while (queue.isEmpty()) {
-            wait(); // Chờ nếu buffer rỗng
+            wait();
         }
         int value = queue.removeFirst();
         System.out.println("Consumed: " + value);
-        notify(); // Báo cho producer có thể thêm dữ liệu
+        notify();
         return value;
     }
 }
@@ -36,7 +36,7 @@ class Producer extends Thread {
         try {
             while (true) {
                 buffer.produce(value++);
-                Thread.sleep(1000); // Tạo sản phẩm sau mỗi giây
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ class Consumer extends Thread {
         try {
             while (true) {
                 buffer.consume();
-                Thread.sleep(1500); // Tiêu thụ sản phẩm sau mỗi 1.5 giây
+                Thread.sleep(1500);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
